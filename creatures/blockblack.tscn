@@ -1,10 +1,15 @@
-[gd_scene load_steps=4 format=1]
+[gd_scene load_steps=6 format=1]
 
-[ext_resource path="res://textures/tileblack32x32.png" type="Texture" id=1]
+[ext_resource path="res://scripts/r2d_creature.gd" type="Script" id=1]
+[ext_resource path="res://textures/tileblack32x32.png" type="Texture" id=2]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="RectangleShape2D" id=4]
 
-resource/name = "Idle"
+custom_solver_bias = 0.0
+extents = Vector2( 16, 16 )
+
+[sub_resource type="Animation" id=5]
+
 length = 1.0
 loop = true
 step = 0.1
@@ -16,7 +21,7 @@ tracks/0/keys = {
 "times": FloatArray( 0, 0.5, 1 ),
 "transitions": FloatArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0.106418, -16.515 ), Vector2( 0.106419, -16.9337 ), Vector2( 0.106418, -16.515 ) ]
+"values": [ Vector2( 0, -8 ), Vector2( 0, -16 ), Vector2( 0, -8 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("base/tileblack32x32:transform/rot")
@@ -29,34 +34,87 @@ tracks/1/keys = {
 "values": [ 0.0, 0.0, 0.0 ]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=3]
 
-resource/name = "base"
 length = 1.0
 loop = false
 step = 0.1
 
-[node name="creature" type="Node2D"]
+[node name="creature" type="RigidBody2D" groups=[
+"creature",
+]]
+
+input/pickable = false
+shapes/0/shape = SubResource( 4 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, -8 )
+shapes/0/trigger = true
+collision/layers = 1
+collision/mask = 1
+mode = 0
+mass = 1.0
+friction = 1.0
+bounce = 0.0
+gravity_scale = 0.0
+custom_integrator = false
+continuous_cd = 0
+contacts_reported = 2
+contact_monitor = true
+sleeping = false
+can_sleep = true
+velocity/linear = Vector2( 0, 0 )
+velocity/angular = 0.0
+damp_override/linear = -1.0
+damp_override/angular = -1.0
+script/script = ExtResource( 1 )
+bcontrol = true
+move_speed = 5
 
 [node name="base" type="Node2D" parent="."]
 
-editor/display_folded = true
-
 [node name="tileblack32x32" type="Sprite" parent="base"]
 
-transform/pos = Vector2( 0.106418, -16.7822 )
-texture = ExtResource( 1 )
+transform/pos = Vector2( 0, -10.5911 )
+texture = ExtResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 playback/process_mode = 1
 playback/default_blend_time = 0.0
 root/root = NodePath("..")
-anims/Idle = SubResource( 1 )
-anims/base = SubResource( 2 )
+anims/Idle = SubResource( 5 )
+anims/base = SubResource( 3 )
 playback/active = true
 playback/speed = 1.0
 blend_times = [  ]
-autoplay = ""
+autoplay = "Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+transform/pos = Vector2( 0, -8 )
+shape = SubResource( 4 )
+trigger = true
+_update_shape_index = 0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -24.0
+margin/top = -56.0
+margin/right = 24.0
+margin/bottom = -40.0
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 100.0
+range/exp_edit = false
+range/rounded = false
+percent/visible = true
 
 
